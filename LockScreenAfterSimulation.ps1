@@ -1,14 +1,23 @@
 # Prompt the user for the desired lock time
-$lockTime = Read-Host "Enter the time to lock the screen (HH:mm)"
+$lockTime = Read-Host "Enter the time to lock the screen (HH:mm) 24 Hours Format"
 
 # Convert the input time to a DateTime object
 $desiredLockTime = Get-Date $lockTime
+
+# Check if the input time is earlier than the current time
+if ($desiredLockTime -lt (Get-Date)) {
+    # Add one day to the desired lock time
+    $desiredLockTime = $desiredLockTime.AddDays(1)
+}
 
 # Calculate the number of seconds until the desired lock time
 $secondsUntilLock = ($desiredLockTime - (Get-Date)).TotalSeconds
 
 # Check if the input time is in the future
 if ($secondsUntilLock -gt 0) {
+    # Display the scheduled lock time with date
+    Write-Host "The screen will be locked on $($desiredLockTime.ToString('yyyy-MM-dd HH:mm:ss'))"
+
     # Define a function for simulating key presses
     Add-Type -TypeDefinition @"
         using System;
@@ -26,8 +35,8 @@ if ($secondsUntilLock -gt 0) {
         }
 "@
 
-    # Start the simulation activity (simulated key press every 5 minutes)
-    $activityIntervalSeconds = 300  # Adjust this value as needed
+    # Start the simulation activity (simulated key press every 30 Seconds)
+    $activityIntervalSeconds = 30  # Adjust this value as needed
 
     while ((Get-Date) -lt $desiredLockTime) {
         [KeyboardSimulator]::SimulateKeyPress(0x7E)  # Simulate the F13 key (0x7E)
