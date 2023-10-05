@@ -33,3 +33,5 @@ Before using this script, ensure you have the following prerequisites:
 
    ```powershell
    .\LockScreenAfterSimulation.ps1
+
+![image](https://github.com/gsrit/lock-down-timer/assets/65939916/95f13378-485d-41e5-a16e-d44b29d16512)
